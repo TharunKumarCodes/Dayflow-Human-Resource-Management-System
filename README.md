@@ -92,8 +92,6 @@ npm run dev:backend
 # From root directory (new terminal tab), start Frontend:
 npm run dev:frontend
 ```
-- **Frontend App**: `http://localhost:5173`
-- **Backend API**: `http://localhost:5000`
 
 ---
 
