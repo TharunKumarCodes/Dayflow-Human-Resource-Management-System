@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  role          String         @default("EMPLOYEE") // EMPLOYEE, HR_ADMIN
+  employeeId    String?        @unique
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  employee      Employee?
+  notifications Notification[]
+}
+
+model Employee {
+  id            String              @id @default(uuid())
+  userId        String              @unique
+  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  employeeCode  String              @unique
+  firstName     String
+  lastName      String
+  email         String              @unique
+  phone         String?
+  department    String
+  designation   String
+  dateOfJoining DateTime
+  basicSalary   Float               @default(5000)
+  allowances    Float               @default(1000)
+  deductions    Float               @default(500)
+  avatarUrl     String?
+  address       String?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  attendances   Attendance[]
+  anomalies     AttendanceAnomaly[]
+  leaveRequests LeaveRequest[]
+  payrolls      Payroll[]
+  documents     Document[]
+}
+
+model Attendance {
+  id              String             @id @default(uuid())
+  employeeId      String
+  employee        Employee           @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  date            String             // YYYY-MM-DD
+  checkIn         DateTime
+  checkOut        DateTime?
+  workHours       Float              @default(0)
+  status          String             @default("PRESENT") // PRESENT, ABSENT, HALF_DAY, LEAVE, LATE
+  riskScore       Float              @default(0)
+  anomalyFlagged  Boolean            @default(false)
+  hrReviewStatus  String             @default("PENDING") // PENDING, APPROVED, CORRECTED, REQUESTED_EXPLANATION
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  anomalies       AttendanceAnomaly[]
+
+  @@unique([employeeId, date])
+}
+
+model AttendanceAnomaly {
+  id            String      @id @default(uuid())
+  attendanceId  String
+  attendance    Attendance  @relation(fields: [attendanceId], references: [id], onDelete: Cascade)
+  employeeId    String
+  employee      Employee    @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  riskScore     Float
+  riskLevel     String      // LOW, MEDIUM, HIGH
+  reason        String
+  hrAction      String      @default("NONE") // NONE, APPROVED, CORRECTED, REQUESTED_EXPLANATION
+  hrNotes       String?
+  reviewedAt    DateTime?
+  reviewedBy    String?
+  createdAt     DateTime    @default(now())
+}
+
+model LeaveRequest {
+  id          String    @id @default(uuid())
+  employeeId  String
+  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  type        String    // PAID, SICK, UNPAID
+  startDate   DateTime
+  endDate     DateTime
+  totalDays   Float
+  reason      String
+  status      String    @default("PENDING") // PENDING, APPROVED, REJECTED
+  hrComment   String?
+  reviewedAt  DateTime?
+  reviewedBy  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Payroll {
+  id               String   @id @default(uuid())
+  employeeId       String
+  employee         Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  payPeriod        String   // e.g. "August 2026"
+  basicSalary      Float
+  allowances       Float
+  deductions       Float
+  grossSalary      Float
+  netSalary        Float
+  status           String   @default("PENDING") // PENDING, PROCESSED, PAID
+  attendanceDays   Int      @default(0)
+  anomalyHoldCount Int      @default(0)
+  generatedAt      DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   @default("INFO") // INFO, WARNING, SUCCESS, URGENT
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  actorId   String
+  actorName String
+  action    String
+  entity    String
+  entityId  String?
+  details   String
+  timestamp DateTime @default(now())
+}
+
+model Document {
+  id         String   @id @default(uuid())
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  title      String
+  fileType   String
+  fileUrl    String
+  uploadedAt DateTime @default(now())
+}
