@@ -1,133 +1,756 @@
-# 🛡️ HR Guard — AI-Driven Attendance Integrity & Payroll Protection System
+# 🚀 Dayflow – AI-Powered Human Resource Management System
 
-> **Hackathon-Ready Production MVP**
-> An AI-powered Human Resource Management & Payroll Protection System designed to detect attendance anomalies in real-time, safeguard organizational payroll against unauthorized overtime, and provide automated HR risk reviews.
+> **Every workday, perfectly aligned.**
+
+Dayflow is an AI-powered Human Resource Management System designed to centralize employee management, attendance tracking, leave management, payroll visibility, HR approvals, notifications, analytics, and audit logging in a single platform.
+
+The project's key innovation is **AI Attendance Integrity & Payroll Protection**, an explainable attendance anomaly detection system that identifies unusual attendance patterns, assigns a risk score, provides reasons for the anomaly, and routes the case to HR for review before it can affect payroll.
 
 ---
 
-## 1. Problem Statement
-Traditional HR management systems treat attendance tracking and payroll processing as isolated administrative functions. This disconnection creates severe financial vulnerabilities:
-- Unverified overtime claims and missed checkouts bloating payroll expenditures.
-- Manual attendance fraud (buddy punching, duplicate scans).
-- Attendance logged during active approved leave status going unnoticed.
+## 🎯 Problem Statement
 
-## 2. The Solution: HR Guard Innovation Pipeline
+Traditional HR operations often involve separate processes for employee information, attendance, leave requests, payroll, and HR approvals.
 
+Dayflow brings these operations together into a centralized digital platform with:
+
+* 🔐 Secure authentication
+* 👥 Role-based access control
+* 👤 Employee profile management
+* 🕐 Attendance tracking
+* 🏖️ Leave management
+* 💰 Payroll management
+* 🤖 Attendance anomaly detection
+* 🔔 Notifications
+* 📊 Analytics and reports
+* 📝 Audit logging
+
+---
+
+# 💡 Our Solution
+
+Dayflow provides two major user experiences:
+
+### 👨‍💻 Employee
+
+Employees can:
+
+* Register and sign in
+* View their dashboard
+* View and manage permitted profile information
+* Check in and check out
+* View attendance history
+* Apply for leave
+* Track leave request status
+* View payroll information
+* View notifications
+
+### 👩‍💼 HR / Admin
+
+HR/Admin users can:
+
+* View employee information
+* Monitor attendance
+* Review attendance anomalies
+* Approve or reject leave requests
+* Add HR comments
+* Manage payroll information
+* View analytics
+* Review audit logs
+* Receive anomaly notifications
+
+---
+
+# 🔥 Key Innovation
+
+## AI Attendance Integrity & Payroll Protection
+
+The core differentiator of Dayflow is its attendance integrity layer.
+
+Instead of allowing attendance records to directly influence payroll without verification, Dayflow analyzes attendance behavior and identifies potentially abnormal records.
+
+### Workflow
+
+```text
+Employee Check-In / Check-Out
+              ↓
+     Attendance Analysis
+              ↓
+      Risk Score Generation
+              ↓
+       Anomaly Detection
+              ↓
+      Explainable Reason
+              ↓
+          HR Review
+              ↓
+    Verified Attendance Record
+              ↓
+         Payroll Processing
 ```
-Attendance Data ➔ AI Anomaly Engine ➔ Risk Score (0-100) ➔ HR Review ➔ Payroll Protection
+
+### Example
+
+An employee normally starts around 9:00 AM but repeatedly checks in significantly late and records unusually short working hours.
+
+The system can generate:
+
+```text
+Risk Score: 78%
+Risk Level: HIGH
+
+Reasons:
+• Significant late check-in
+• Critically short work duration
+• Deviation from employee's normal attendance pattern
 ```
 
-HR Guard continuously scans attendance terminal events, calculates an **AI Risk Score**, automatically places high-risk payroll accounts on **HOLD FOR REVIEW**, and generates natural language executive summaries for HR action.
+The system does **not automatically punish the employee** based only on the anomaly score.
+
+Instead, the anomaly is sent to HR for review.
+
+This creates a **human-in-the-loop attendance verification workflow**.
 
 ---
 
-## 3. Key Features
+# 🤖 Explainable Attendance Anomaly Engine
 
-- **🛡️ Automated Payroll Protection**: Prevents payroll disbursement whenever an employee has an unresolved High-Risk attendance anomaly.
-- **🤖 AI Attendance Intelligence Engine**: Detects 5 critical anomaly types with real-time risk scoring (0-100).
-- **🗣️ Natural Language AI Summaries**: Generates human-readable executive findings explaining why an anomaly was flagged.
-- **📊 Role-Based Dashboards**: Customized views for **HR Admin**, **Manager**, and **Employee**.
-- **⏱️ Live Check-In / Check-Out Station**: Real-time clocking station for employees with shift duration tracking.
-- **👥 Employee Directory & Profile Management**: Complete CRUD operations, profile tabs, and attendance history.
-- **🏖️ Leave Management System**: Interactive leave application, approval workflows, and leave-attendance conflict resolution.
-- **📑 Comprehensive Reports & CSV Exporter**: Download raw CSV reports for Attendance, AI Anomalies, and Payroll Risk.
+The current implementation uses an **explainable rule-based scoring engine**.
+
+The engine evaluates:
+
+### 1. Check-In Time
+
+The system compares the check-in time against a 9:00 AM baseline.
+
+Examples:
+
+* Moderate lateness → risk increase
+* Significant lateness → higher risk
+* Extremely unusual check-in time → higher risk
+
+### 2. Work Duration
+
+The engine analyzes working duration.
+
+Examples:
+
+* Less than 7 hours → increased risk
+* Less than 4 hours → significantly increased risk
+
+### 3. Historical Behavior
+
+The system analyzes recent attendance history and evaluates:
+
+* Average check-in time
+* Deviation from normal behavior
+* Repeated lateness
+
+The final score is capped at 99%.
+
+### Risk Levels
+
+| Risk Score | Level     |
+| ---------: | --------- |
+|      0–34% | 🟢 Low    |
+|     35–59% | 🟡 Medium |
+|     60–99% | 🔴 High   |
+
+An attendance record is flagged as an anomaly when its score reaches the configured anomaly threshold.
+
+> **Note:** The current implementation is an explainable rule-based engine. It is structured so that a future machine-learning model can replace or extend the scoring engine.
 
 ---
 
-## 4. AI Anomaly Engine & Risk Scoring Matrix
+# 🧩 Main Features
 
-| Anomaly Type | Condition | Score |
-| :--- | :--- | :---: |
-| **Missing Checkout** | Check-in logged without checkout timestamp | `+30` |
-| **Excessive Overtime** | Recorded shift duration > 12.0 hours | `+25` |
-| **Repeated Late Arrival** | 3+ consecutive check-ins after 09:30 AM | `+20` |
-| **Attendance During Leave** | Active check-in on approved leave date | `+30` |
-| **Duplicate Attendance** | Multiple check-in signals on same date | `+40` |
+## 🔐 Authentication
 
-### Risk Level Scale:
-- `0 – 29`: 🟢 **NORMAL**
-- `30 – 59`: 🟡 **MEDIUM RISK**
-- `60 – 100`: 🔴 **HIGH RISK** *(Triggers automatic `HOLD FOR REVIEW` status on Payroll)*
+* Employee registration
+* HR/Admin registration
+* Login
+* JWT-based authentication
+* Password hashing using bcrypt
+* Protected routes
+* Role-based authorization
+* Automatic session handling
 
 ---
 
-## 5. Technology Stack
+## 👤 Employee Management
 
-- **Frontend**: React 18, Vite, Tailwind CSS v4, Lucide React icons, Recharts, React Router DOM, Axios.
-- **Backend**: Node.js, Express.js, JWT (`jsonwebtoken`), Password Hashing (`bcryptjs`).
-- **Database**: MySQL (`mysql2/promise`) with automatic zero-config In-Memory Database Fallback.
+Employee profiles contain:
 
-## 6. Installation & How to Run
+* Employee ID
+* Name
+* Email
+* Phone
+* Address
+* Department
+* Designation
+* Joining date
+* Salary information
+* Profile image
+* Documents
 
-### Step 1: Clone & Install Dependencies
+---
+
+## 🕐 Attendance Management
+
+Employees can:
+
+* Check in
+* Check out
+* View attendance
+* View working hours
+* Track attendance status
+
+Attendance supports statuses such as:
+
+* Present
+* Absent
+* Half-day
+* Leave
+* Late
+
+The system prevents duplicate attendance records for the same employee and date.
+
+---
+
+## 🏖️ Leave Management
+
+Employees can apply for:
+
+* Paid Leave
+* Sick Leave
+* Unpaid Leave
+
+Each request contains:
+
+* Leave type
+* Start date
+* End date
+* Total days
+* Reason
+* Status
+
+### Leave Status
+
+```text
+PENDING
+APPROVED
+REJECTED
+```
+
+HR can:
+
+* View leave requests
+* Approve requests
+* Reject requests
+* Add comments
+* Review employee leave history
+
+---
+
+## 💰 Payroll Management
+
+Payroll information includes:
+
+* Basic salary
+* Allowances
+* Deductions
+* Gross salary
+* Net salary
+* Pay period
+* Payment status
+* Attendance days
+* Attendance anomaly holds
+
+Employees can view their payroll information.
+
+HR/Admin can view and manage payroll information.
+
+The project also includes a **salary slip interface**.
+
+---
+
+## 🔔 Notifications
+
+The notification system provides alerts for important events such as:
+
+* Attendance anomalies
+* Leave updates
+* HR actions
+* Payroll-related updates
+
+HR users receive notifications when an attendance anomaly is detected.
+
+---
+
+## 📊 Analytics
+
+The HR dashboard provides analytical views for:
+
+* Employee statistics
+* Attendance
+* Leave information
+* Payroll
+* Attendance anomalies
+
+Charts are implemented using **Recharts**.
+
+---
+
+## 📝 Audit Logs
+
+Dayflow records important system activities.
+
+Examples include:
+
+* Employee creation
+* Payroll generation
+* System initialization
+* HR actions
+
+Audit logs help provide traceability for important HR operations.
+
+---
+
+# 🏗️ System Architecture
+
+```text
+                    ┌───────────────────────┐
+                    │       Dayflow         │
+                    │       HRMS            │
+                    └───────────┬───────────┘
+                                │
+                 ┌──────────────┴──────────────┐
+                 │                             │
+          Employee Portal                HR/Admin Portal
+                 │                             │
+                 └──────────────┬──────────────┘
+                                │
+                         React Frontend
+                                │
+                            REST APIs
+                                │
+                      Node.js + Express
+                                │
+                 ┌──────────────┼──────────────┐
+                 │              │              │
+              Prisma       JWT Auth       Anomaly Engine
+                 │              │              │
+                 └──────────────┼──────────────┘
+                                │
+                             SQLite
+```
+
+---
+
+# 🛠️ Technology Stack
+
+## Frontend
+
+* React 18
+* TypeScript
+* Vite
+* Tailwind CSS
+* React Router
+* Axios
+* Recharts
+* Lucide React
+
+## Backend
+
+* Node.js
+* Express.js
+* TypeScript
+* JWT
+* bcryptjs
+* Zod
+* CORS
+
+## Database
+
+* SQLite
+* Prisma ORM
+
+## Development
+
+* Vite
+* TypeScript
+* ts-node
+* ts-node-dev
+* Concurrently
+
+---
+
+# 📁 Project Structure
+
+```text
+dayflow-hrms/
+│
+├── client/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── types/
+│   │   ├── App.tsx
+│   │   ├── index.css
+│   │   └── main.tsx
+│   │
+│   ├── public/
+│   ├── package.json
+│   ├── tailwind.config.js
+│   ├── tsconfig.json
+│   └── vite.config.ts
+│
+├── server/
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   └── seed.ts
+│   │
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   └── utils/
+│   │
+│   ├── .env.example
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── package.json
+└── README.md
+```
+
+---
+
+# 🗄️ Database Models
+
+The Prisma database contains the following major models:
+
+```text
+User
+Employee
+Attendance
+AttendanceAnomaly
+LeaveRequest
+Payroll
+Notification
+AuditLog
+Document
+```
+
+### Relationships
+
+```text
+User
+ │
+ └── Employee
+       ├── Attendance
+       ├── AttendanceAnomaly
+       ├── LeaveRequest
+       ├── Payroll
+       └── Document
+
+User
+ └── Notification
+
+AuditLog
+ └── Records system actions
+```
+
+---
+
+# 🔑 Demo Credentials
+
+The project includes seeded demo accounts.
+
+### HR / Admin
+
+```text
+Email: admin@dayflow.com
+Password: admin123
+Role: HR_ADMIN
+```
+
+### Employee
+
+```text
+Email: priya.sharma@dayflow.com
+Password: password123
+Role: EMPLOYEE
+```
+
+Additional employee accounts are included in the seed data.
+
+> For production deployment, replace all demo credentials and secrets.
+
+---
+
+# 🚀 Getting Started
+
+## 1. Clone the repository
+
 ```bash
-# Root directory dependencies
-npm install
-
-# Backend dependencies
-cd backend && npm install
-
-# Frontend dependencies
-cd ../frontend && npm install
+git clone <YOUR_GITHUB_REPOSITORY_URL>
+cd dayflow-hrms
 ```
 
-### Step 2: Configure Environment Variables
-A pre-configured `.env` file is located in `backend/.env`:
+---
+
+## 2. Install dependencies
+
+```bash
+npm run install:all
+```
+
+---
+
+## 3. Configure environment variables
+
+Create:
+
+```text
+server/.env
+```
+
+Use the following structure:
+
 ```env
 PORT=5000
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=
-DB_NAME=hr_guard
-JWT_SECRET=hr_guard_hackathon_super_secret_key_2026
+DATABASE_URL="file:./dev.db"
+JWT_SECRET="your_secure_jwt_secret"
+NODE_ENV="development"
 ```
 
-### Step 3: Run the Application
+---
+
+## 4. Initialize the database
+
 ```bash
-# From root directory, start Backend API:
-npm run dev:backend
-
-# From root directory (new terminal tab), start Frontend:
-npm run dev:frontend
+npm run db:push
 ```
 
 ---
 
-## 7. Demo Credentials for Hackathon
+## 5. Seed demo data
 
-Quick clickable demo buttons are built directly into the Login page for seamless presentation:
+```bash
+npm run db:seed
+```
 
-| Role | Email | Password | Access Capabilities |
-| :--- | :--- | :--- | :--- |
-| **HR Admin** | `admin@hrguard.com` | `admin123` | Full access to Dashboard, Employees, AI Alerts, Payroll Release/Hold, Reports, Settings |
-| **Manager** | `manager@hrguard.com` | `manager123` | Department team attendance, team leave approval, team AI alerts |
-| **Employee** | `employee@hrguard.com` | `employee123` | Personal check-in/out station, personal leave application, own payroll status |
+The seed process creates:
 
----
-
-## 8. Hackathon Presentation Demo Workflow
-
-Use this 60-second end-to-end interactive story during your hackathon pitch:
-
-1. **Sign in as Employee** (`employee@hrguard.com` / `employee123`):
-   - Navigate to Dashboard. Click **CHECK IN NOW** to log live attendance. Click **CHECK OUT NOW** to simulate shift completion.
-2. **Sign in as HR Admin** (`admin@hrguard.com` / `admin123`):
-   - Notice the **AI Anomalies (5)** and **Payroll At Risk (₹42,500)** KPI cards on the main dashboard.
-3. **Inspect AI Alert Summary**:
-   - Open **AI Intelligence** page (`/anomalies`). Locate **Rahul Kumar (EMP102)** with **Excessive Overtime (13h 42m duration)**, Score `87/100` (🔴 **HIGH RISK**).
-4. **Open Anomaly Detail Page**:
-   - Click **Review** to see the full AI investigation breakdown, exact clock timestamps, natural language findings, and recommendation.
-5. **Verify Payroll Protection**:
-   - Navigate to **Payroll Hub** (`/payroll`). Notice Rahul Kumar's status is locked to **`🔴 HOLD FOR REVIEW`**.
-   - Attempting to click "Release" triggers **Payroll Protection Lock**.
-6. **Resolve Anomaly & Unlock Payroll**:
-   - Go back to Rahul Kumar's Anomaly Detail page and click **Resolve & Clear**.
-   - Return to Payroll Hub: Rahul Kumar's status is automatically unlocked and updated to **`🟢 CLEARED`**.
+* HR/Admin account
+* Employee accounts
+* Employee profiles
+* Attendance records
+* Attendance anomalies
+* Leave requests
+* Payroll records
+* Notifications
+* Audit logs
 
 ---
 
-## 9. Future Enhancements
+# ▶️ Run the Application
 
-- Geofencing and biometric facial recognition check-in validation.
-- Direct banking portal API integration for automated salary payout upon HR clearing.
-- Real-time Slack / WhatsApp notification alerts for high-risk payroll locks.
+### Run backend
+
+```bash
+npm run dev:server
+```
+
+Backend:
+
+```text
+http://localhost:5000
+```
+
+Health check:
+
+```text
+http://localhost:5000/api/health
+```
+
+### Run frontend
+
+In another terminal:
+
+```bash
+npm run dev:client
+```
+
+Vite will provide the local frontend URL.
+
+### Run both together
+
+```bash
+npm run dev
+```
+
+---
+
+# 🔌 API Modules
+
+The backend is organized into REST API modules:
+
+```text
+/api/auth
+/api/employees
+/api/attendance
+/api/anomalies
+/api/leaves
+/api/payroll
+/api/notifications
+/api/analytics
+/api/audit-logs
+```
+
+The backend uses JWT authentication and role-based authorization for protected resources.
+
+---
+
+# 🔐 Security
+
+Dayflow implements:
+
+* JWT authentication
+* Password hashing
+* Protected frontend routes
+* Backend authorization middleware
+* Role-based access control
+* Environment-based configuration
+* API authentication headers
+* Input validation
+* Centralized error handling
+
+Employees and HR/Admin users have different access permissions.
+
+---
+
+# 🧪 Demo Scenario
+
+The seeded database contains realistic attendance data, including intentionally anomalous attendance records.
+
+### Employee Flow
+
+```text
+Login
+  ↓
+Employee Dashboard
+  ↓
+Check In / Check Out
+  ↓
+View Attendance
+  ↓
+Apply for Leave
+  ↓
+Track Leave Status
+  ↓
+View Payroll
+```
+
+### HR Flow
+
+```text
+Login
+  ↓
+HR Dashboard
+  ↓
+View Employees
+  ↓
+Monitor Attendance
+  ↓
+Attendance Integrity Center
+  ↓
+Review Anomaly
+  ↓
+Approve / Correct / Request Explanation
+  ↓
+Review Payroll
+  ↓
+Analytics & Audit Logs
+```
+
+---
+
+# 🏆 Why Dayflow?
+
+Dayflow combines everyday HR operations with an additional attendance integrity layer.
+
+### Traditional HRMS
+
+```text
+Attendance → Payroll
+```
+
+### Dayflow
+
+```text
+Attendance
+     ↓
+Behavior Analysis
+     ↓
+Anomaly Detection
+     ↓
+Risk Score
+     ↓
+Explanation
+     ↓
+HR Verification
+     ↓
+Payroll
+```
+
+This provides a transparent approach to handling potentially abnormal attendance records.
+
+---
+
+# 🔮 Future Enhancements
+
+Potential future improvements include:
+
+* Machine-learning-based anomaly detection
+* Face verification for attendance
+* Geolocation-based attendance validation
+* Email verification
+* Email notifications
+* Real-time push notifications
+* Advanced payroll automation
+* Automated salary-slip PDF generation
+* Department-level HR analytics
+* Predictive employee insights
+* Cloud deployment
+* Multi-company support
+* Mobile application
+
+---
+
+# 📌 Current Implementation Note
+
+The current project implements the attendance intelligence feature using an **explainable rule-based anomaly scoring engine** based on:
+
+* Check-in timing
+* Work duration
+* Historical attendance patterns
+* Repeated lateness
+* Deviation from typical attendance behavior
+
+This approach is intentionally transparent and suitable for demonstrating the concept during the hackathon.
+
+A future version can integrate a trained machine-learning model while retaining the existing HR review workflow.
+
+---
+
+
+# 📜 License
+
+This project was developed as a hackathon project.
+
+Add an appropriate open-source license if required by your hackathon or team.
