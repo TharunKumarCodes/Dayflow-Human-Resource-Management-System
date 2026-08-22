@@ -57,8 +57,6 @@ HR Guard continuously scans attendance terminal events, calculates an **AI Risk 
 - **Backend**: Node.js, Express.js, JWT (`jsonwebtoken`), Password Hashing (`bcryptjs`).
 - **Database**: MySQL (`mysql2/promise`) with automatic zero-config In-Memory Database Fallback.
 
----
-
 ## 6. Installation & How to Run
 
 ### Step 1: Clone & Install Dependencies
